@@ -1,0 +1,11 @@
+src/
+examples/
+tsconfig.json
+tsup.config.ts
+.npmrc
+*.md
+!README.md
+.gitignore
+.DS_Store
+node_modules/
+*.log
