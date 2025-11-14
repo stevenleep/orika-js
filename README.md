@@ -1,176 +1,131 @@
 # orika-js
 
-TypeScript object mapping library for PO/DTO/VO transformations.
+TypeScript 对象映射库 - 实现 DTO/VO/PO/DO 等分层架构中的对象转换
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## Installation
+> 灵感源自 Java 的 [Orika](https://orika-mapper.github.io/orika-docs/)、[MapStruct](https://mapstruct.org/) 和 .NET 的 [AutoMapper](https://automapper.org/)
 
-```bash
-pnpm add orika-js
+## 为什么需要对象映射？
+
+现代软件架构中，分层设计是最佳实践。不同层级使用不同的对象模型，需要频繁的数据转换：
+
+- **表现层 (Presentation Layer)**：VO (View Object) / DTO (Data Transfer Object)
+- **业务层 (Business Layer)**：DO (Domain Object) / BO (Business Object)
+- **持久层 (Persistence Layer)**：PO (Persistent Object) / Entity
+
+典型的转换场景：
+
+```
+Controller  →  Service     →  Repository  →  Database
+   DTO      →    DO        →     PO       →  Table Record
 ```
 
-## Quick Start
+传统做法是手写转换代码，存在诸多问题：
+- 大量样板代码，维护成本高
+- 字段遗漏、类型错误难以发现
+- 模型变更后需要同步修改多处代码
 
-**Step 1: Define your classes**
+**orika-js** 采用声明式映射配置，一次定义，全局复用。
+
+## 核心特性
+
+| 特性 | 说明 |
+|------|------|
+| **类型安全** | 完整的 TypeScript 泛型支持，编译时类型检查和智能提示 |
+| **约定优于配置** | 同名字段自动映射，遵循 Convention over Configuration 原则 |
+| **异步支持** | 原生支持异步转换器、批量映射和并发控制 |
+| **灵活配置** | 字段重命名、嵌套映射、条件转换、自定义转换器、映射拦截器 |
+| **框架集成** | Vue 3 响应式映射、Pinia 状态管理插件 |
+| **零依赖** | 核心库无运行时依赖，支持 Tree-shaking |
+| **性能优化** | 映射结果缓存、惰性求值、批量处理优化 |
+
+## 安装
+
+```bash
+# 核心库
+npm install @orika-js/core
+
+# Vue 3 项目
+npm install @orika-js/core @orika-js/vue3
+```
+
+## 快速开始
+
+**3 步完成对象映射：**
 
 ```typescript
-class User {
+import { createMapperBuilder, MapperFactory } from '@orika-js/core';
+
+// 第 1 步：定义领域模型和 DTO
+class UserEntity {
   id: number;
   username: string;
+  password: string;     // 敏感字段
   email: string;
-  password: string;
+  createdAt: Date;
 }
 
 class UserDTO {
   id: number;
-  fullName: string;
-  email: string;
+  displayName: string;  // 字段重命名
+  email: string;        // 同名字段自动映射
 }
-```
 
-**Step 2: Configure mapping**
-
-```typescript
-import { createMapperBuilder } from 'orika-js';
-
-createMapperBuilder<User, UserDTO>()
-  .from(User)
-  .to(UserDTO)
-  .mapField('username', 'fullName')  // username → fullName
-  .exclude('password')                // Don't map password
+// 第 2 步：配置映射规则（配置一次，全局可用）
+createMapperBuilder<UserEntity, UserDTO>()
+  .from(UserEntity).to(UserDTO)
+  .mapField('username', 'displayName')  // 字段重命名
+  .exclude('password', 'createdAt')     // 排除敏感或不需要的字段
   .register();
-```
 
-**Step 3: Map objects**
-
-```typescript
-import { MapperFactory } from 'orika-js';
-
+// 第 3 步：执行映射
 const factory = MapperFactory.getInstance();
+const entity = { 
+  id: 1, 
+  username: 'Alice', 
+  password: 'secret123',
+  email: 'alice@example.com',
+  createdAt: new Date()
+};
 
-const user = new User();
-user.id = 1;
-user.username = 'Alice';
-user.email = 'alice@example.com';
-user.password = 'secret';
-
-const dto = factory.map(user, User, UserDTO);
-// Result: { id: 1, fullName: 'Alice', email: 'alice@example.com' }
+const dto = factory.map(entity, UserEntity, UserDTO);
+// => { id: 1, displayName: 'Alice', email: 'alice@example.com' }
 ```
 
-That's it! 🎉
+## Vue 3 集成
 
-## Key Features
-
-| Feature | Description |
-|---------|-------------|
-| Type Safe | Full TypeScript generics support |
-| Auto Mapping | Same-name fields mapped automatically |
-| Async | `mapAsync` with parallel processing |
-| Collections | Map, Set, Array support |
-| Validation | Built-in validation hooks |
-| Flexible | Custom converters, hooks, conditions |
-
-## Common Use Cases
+`@orika-js/vue3` 提供了 Vue 3 响应式系统的集成：
 
 ```typescript
-// 1. Field renaming
-.mapField('username', 'fullName')
+import { useMapper, mapToReactive, mapToComputed } from '@orika-js/vue3';
 
-// 2. Custom transformation
-.forMember('age', (s) => 2024 - s.birthYear)
+// Composition API 中使用
+const { map, mapArray } = useMapper(UserEntity, UserDTO);
+const userDTO = map(userEntity);           // Entity -> DTO
+const userList = mapArray(entityList);     // 批量转换
 
-// 3. Async data fetching
-.forMemberAsync('author', async (s) => await fetchUser(s.authorId))
+// 响应式映射（自动追踪依赖）
+const reactiveDTO = mapToReactive(userEntity, UserEntity, UserDTO);
 
-// 4. Exclude sensitive fields
-.exclude('password', 'salt')
+// 计算属性映射
+const userDTO = mapToComputed(userRef, UserEntity, UserDTO);
 
-// 5. Array mapping
-factory.mapArray(users, User, UserDTO)
+// Pinia Store 集成
+import { createPinia } from 'pinia';
+import { createMapperPlugin } from '@orika-js/vue3';
 
-// 6. Validation
-.validate((s, d) => {
-  if (!d.email.includes('@')) throw new Error('Invalid email');
-})
+const pinia = createPinia();
+pinia.use(createMapperPlugin());  // 在 Store 中直接使用映射功能
 ```
 
-## API Reference
+更多高级用法请查看 [@orika-js/vue3 文档](./packages/vue3)
 
-### MapperFactory
+## 更多示例
 
-```typescript
-const factory = MapperFactory.getInstance();
-
-factory.map(source, S, D, options?)
-factory.mapArray(sources, S, D)
-factory.mapChain(source, A, B, C)
-factory.merge(updates, existing, S, D)
-
-await factory.mapAsync(source, S, D)
-await factory.mapArrayAsync(sources, S, D)
-```
-
-### Options
-
-```typescript
-{
-  pick: ['id', 'name'],      // Only map these
-  omit: ['password'],        // Skip these
-  merge: true,               // Don't overwrite existing
-  includeSymbols: true,      // Include Symbol properties
-  includeInherited: true,    // Include parent class properties
-}
-```
-
-### Advanced
-
-```typescript
-// Conditional
-.mapFieldWhen('field', 'dest', condition, converter)
-
-// Bidirectional
-factory.bidirectional(A, B)
-
-// Statistics
-factory.enableStatistics(true)
-factory.getStats(S, D)
-```
-
-## Web 支持 🌐
-
-orika-js 完全支持浏览器环境！
-
-```bash
-# 运行 Web 示例
-pnpm run example:web
-```
-
-详见 [examples/web](examples/web/) 目录查看完整的 Web 示例，包括：
-- ✅ 基础字段映射
-- ✅ 批量数组映射
-- ✅ 异步数据获取
-- ✅ 实时交互演示
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Build
-pnpm build
-
-# Watch mode
-pnpm dev
-
-# Run examples
-pnpm run example:01  # 基础示例
-pnpm run example:web # Web 示例
-```
+查看 [examples](./examples) 目录获取更多使用示例：
 
 ## License
 
-MIT
+MIT © [Steven Lee](https://github.com/stevenleep)

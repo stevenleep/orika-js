@@ -1,5 +1,4 @@
-import { MapperFactory } from '../src/core/MapperFactory';
-import { MapTo, MapField, Exclude, Transform, createMappingFromDecorators } from '../src/decorators';
+import { MapperFactory, MapTo, MapField, Exclude, Transform, createMappingFromDecorators } from '@orika-js/core';
 
 const factory = MapperFactory.getInstance();
 

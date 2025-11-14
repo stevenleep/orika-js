@@ -1,4 +1,4 @@
-import { MapperFactory, createMapperBuilder } from '../src';
+import { MapperFactory, createMapperBuilder } from '@orika-js/core';
 
 const factory = MapperFactory.getInstance();
 factory.enableStatistics(true);

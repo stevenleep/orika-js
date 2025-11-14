@@ -1,11 +1,6 @@
-src/
-examples/
-tsconfig.json
-tsup.config.ts
-.npmrc
-*.md
+# Monorepo 根目录不发布
+# 只发布 packages/* 下的各个子包
+
+*
 !README.md
-.gitignore
-.DS_Store
-node_modules/
-*.log
+!LICENSE

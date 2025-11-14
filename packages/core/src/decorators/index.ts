@@ -69,8 +69,6 @@ export function createMappingFromDecorators<S, D>(sourceClass: ClassConstructor<
     builder.exclude(...Array.from(metadata.excludedFields));
   }
 
-  builder.mapField('id', 'id');
-
   return builder;
 }
 

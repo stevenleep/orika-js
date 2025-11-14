@@ -1,6 +1,7 @@
 {
   "name": "orika-js",
   "version": "1.2.1",
+  "private": true,
   "description": "TypeScript object mapping library for PO/DTO/VO transformations",
   "author": "Steven Lee",
   "license": "MIT",
@@ -9,43 +10,14 @@
     "type": "git",
     "url": "https://github.com/stevenleep/orika-js.git"
   },
-  "keywords": [
-    "mapper",
-    "dto",
-    "po",
-    "vo",
-    "object-mapping",
-    "typescript",
-    "converter",
-    "type-safe"
-  ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "prepublishOnly": "pnpm run build",
-    "example:01": "tsx examples/01-basic.ts",
-    "example:02": "tsx examples/02-async.ts",
-    "example:03": "tsx examples/03-collections.ts",
-    "example:04": "tsx examples/04-validation.ts",
-    "example:05": "tsx examples/05-advanced.ts",
-    "example:06": "tsx examples/06-simple-config.ts",
-    "example:decorator": "tsx --tsconfig tsconfig.examples.json examples/06-decorator.ts",
-    "example:web": "cd examples/web && pnpm install && pnpm dev"
+    "build": "pnpm -r --filter './packages/*' run build",
+    "build:core": "pnpm --filter '@orika-js/core' run build",
+    "build:vue3": "pnpm --filter '@orika-js/vue3' run build",
+    "dev": "pnpm -r --parallel --filter './packages/*' run dev",
+    "dev:core": "pnpm --filter '@orika-js/core' run dev",
+    "dev:vue3": "pnpm --filter '@orika-js/vue3' run dev",
+    "example:vue3:app": "cd examples/vue3-real-app && pnpm dev"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
