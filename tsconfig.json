@@ -12,6 +12,9 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "useDefineForClassFields": false,
     "paths": {
       "@orika-js/core": ["./packages/core/src"],
       "@orika-js/vue3": ["./packages/vue3/src"]

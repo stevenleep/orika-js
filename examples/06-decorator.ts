@@ -1,6 +1,4 @@
-import { MapperFactory, MapTo, MapField, Exclude, Transform, createMappingFromDecorators } from '@orika-js/core';
-
-const factory = MapperFactory.getInstance();
+import { MapTo, MapField, Exclude, Transform, createMappingFromDecorators } from '@orika-js/core';
 
 class UserDTO {
   id: number;
@@ -50,7 +48,8 @@ console.log('='.repeat(60));
 console.log('Decorator-based Mapping Example');
 console.log('='.repeat(60));
 
-createMappingFromDecorators<User, UserDTO>(User).register();
+// 创建 mapper 实例
+const mapper = createMappingFromDecorators<User, UserDTO>(User);
 
 const user = new User();
 user.id = 1;
@@ -67,7 +66,8 @@ console.log('  email:', user.email);
 console.log('  userStatus:', user.userStatus);
 console.log('  password:', user.password);
 
-const dto = factory.map(user, User, UserDTO);
+// 直接使用 mapper.map() 方法
+const dto = mapper.map(user);
 
 console.log('\nMapped UserDTO:');
 console.log('  id:', dto.id);

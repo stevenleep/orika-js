@@ -110,7 +110,26 @@ export type { PropertyDescriptorOptions } from './utils/PropertyUtils';
 export { MappingCache } from './cache/MappingCache';
 export type { CacheOptions, CacheEntry } from './cache/MappingCache';
 
-export { MapTo, MapField, Exclude, Transform, createMappingFromDecorators } from './decorators';
+export { 
+  MapTo, 
+  MapField, 
+  MapFrom,
+  Exclude, 
+  Transform, 
+  TransformAsync,
+  ConvertWith,
+  Format,
+  IgnoreNull,
+  IgnoreUndefined,
+  IgnoreNullish,
+  MapWhen,
+  Default,
+  DefaultFactory,
+  Nested,
+  BeforeMapping,
+  AfterMapping,
+  createMappingFromDecorators 
+} from './decorators';
 
 export { ExpressionEvaluator } from './expression/ExpressionEvaluator';
 
