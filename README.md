@@ -14,7 +14,7 @@
 
 ## 简介
 
-Orika-JS 是一个类型安全的对象映射库，用于简化不同数据模型之间的转换（Entity/DTO/VO）。灵感来自 Java 的 Orika 框架。
+Orika-JS 是一个类型安全的对象映射库，用于简化不同数据模型之间的转换（Entity/DTO/VO）。
 
 ## 特性
 
