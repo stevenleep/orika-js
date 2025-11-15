@@ -1,25 +1,26 @@
 {
-  "name": "@orika-js/vue3",
+  "name": "@orika-js/pinia",
   "version": "1.0.0",
-  "description": "Vue 3 adapter for orika-js - Reactive object mapping for Vue 3",
+  "description": "Pinia adapter for orika-js - Object mapping plugin for Pinia stores",
   "author": "Steven Lee",
   "license": "MIT",
-  "homepage": "https://github.com/stevenleep/orika-js/tree/main/packages/vue3#readme",
+  "homepage": "https://github.com/stevenleep/orika-js/tree/main/packages/pinia#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/stevenleep/orika-js.git",
-    "directory": "packages/vue3"
+    "directory": "packages/pinia"
   },
   "bugs": {
     "url": "https://github.com/stevenleep/orika-js/issues"
   },
   "keywords": [
     "orika-js",
+    "pinia",
     "vue3",
     "vue",
     "mapper",
-    "reactive",
-    "composition-api",
+    "store",
+    "plugin",
     "typescript"
   ],
   "main": "./dist/index.js",
@@ -49,7 +50,7 @@
   },
   "peerDependencies": {
     "@orika-js/core": "^1.2.0",
-    "vue": "^3.0.0"
+    "pinia": "^2.0.0"
   },
   "devDependencies": {
     "@orika-js/core": "workspace:*",

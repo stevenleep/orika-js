@@ -102,29 +102,6 @@ export interface UseAsyncMappingResult<S, D> extends UseMappingResult<S, D> {
 }
 
 /**
- * Pinia 映射插件选项
- */
-export interface PiniaMapperOptions {
-  /**
-   * 是否自动转换 API 响应
-   * @default true
-   */
-  autoTransform?: boolean;
-  
-  /**
-   * 是否缓存映射结果
-   * @default true
-   */
-  cache?: boolean;
-  
-  /**
-   * 是否启用调试日志
-   * @default false
-   */
-  debug?: boolean;
-}
-
-/**
  * 双向映射返回结果
  */
 export interface UseBidirectionalMapperResult<A, B> {

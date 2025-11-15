@@ -1,3 +1,5 @@
 packages:
   - 'packages/*'
-  - 'examples/vue3-real-app'
+  - 'examples/vue3-app'
+  - 'examples/react-demo'
+  - 'examples/pinia-integration'

@@ -32,9 +32,6 @@ export {
 // 响应式映射函数
 export { mapToReactive, mapToRef, mapToComputed } from './reactive-mapper';
 
-// Pinia 插件
-export { createPiniaMapperPlugin } from './pinia-plugin';
-
 // 类型导出
 export type { 
   VueMapperOptions, 
@@ -45,7 +42,6 @@ export type {
   UseMapperDiffResult,
   UseMapperChainResult,
   UseMergeMapperResult,
-  UseMapperStatsResult,
-  PiniaMapperOptions
+  UseMapperStatsResult
 } from './types';
 

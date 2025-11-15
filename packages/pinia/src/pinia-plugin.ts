@@ -9,7 +9,7 @@ import type { PiniaMapperOptions } from './types';
  * 
  * @example
  * import { createPinia } from 'pinia';
- * import { createPiniaMapperPlugin } from '@orika-js/vue3';
+ * import { createPiniaMapperPlugin } from '@orika-js/pinia';
  * 
  * const pinia = createPinia();
  * pinia.use(createPiniaMapperPlugin());

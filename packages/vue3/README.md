@@ -24,11 +24,12 @@ yarn add @orika-js/core @orika-js/vue3
 
 - ✅ **完整的响应式支持** - ref、reactive、computed 无缝集成
 - ✅ **Composition API** - useMapper、useAsyncMapper 等组合式函数
-- ✅ **Pinia 插件** - 在 Store 中直接使用对象映射
 - ✅ **TypeScript** - 完整的类型推导和类型安全
 - ✅ **自动解包** - 自动处理 Vue 响应式对象
 - ✅ **批量处理** - 支持批量异步映射和进度追踪
 - ✅ **零额外依赖** - 只依赖 vue 和 @orika-js/core
+
+> 💡 **需要 Pinia 集成？** 请查看 [@orika-js/pinia](../pinia) 包
 
 ## 🚀 快速开始
 
@@ -223,80 +224,6 @@ const dtoRef = useAutoMapper(userRef, UserEntity, UserDTO, {
 // userRef 变化时，dtoRef 会自动更新
 ```
 
-### Pinia 插件
-
-#### 安装插件
-
-```typescript
-// main.ts
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import { createPiniaMapperPlugin } from '@orika-js/vue3';
-
-const app = createApp(App);
-const pinia = createPinia();
-
-// 安装映射插件
-pinia.use(createPiniaMapperPlugin({
-  autoTransform: true,  // 自动转换 API 响应
-  cache: true,          // 缓存映射结果
-  debug: false          // 调试模式（打印映射日志）
-}));
-
-app.use(pinia);
-app.mount('#app');
-```
-
-#### 在 Store 中使用
-
-```typescript
-// stores/user.ts
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
-
-export const useUserStore = defineStore('user', () => {
-  const users = ref<UserDTO[]>([]);
-  const currentUser = ref<UserDTO | null>(null);
-  
-  async function fetchUsers() {
-    const response = await fetch('/api/users');
-    const data = await response.json();
-    
-    // 使用插件提供的 $mapper
-    users.value = this.$mapper.mapArray(data, UserEntity, UserDTO);
-  }
-  
-  async function fetchUser(id: number) {
-    const response = await fetch(`/api/users/${id}`);
-    const data = await response.json();
-    
-    currentUser.value = this.$mapper.map(data, UserEntity, UserDTO);
-  }
-  
-  async function updateUser(id: number, updates: Partial<UserDTO>) {
-    const existing = users.value.find(u => u.id === id);
-    if (!existing) return;
-    
-    // 合并更新
-    const merged = this.$mapper.merge(updates, existing, UserDTO, UserEntity);
-    await api.updateUser(id, merged);
-  }
-  
-  return { users, currentUser, fetchUsers, fetchUser, updateUser };
-});
-```
-
-#### 插件提供的方法
-
-```typescript
-// 在任何 Pinia Store 中可用
-this.$mapper.map(source, SourceClass, DestClass);
-this.$mapper.mapArray(sources, SourceClass, DestClass);
-this.$mapper.mapAsync(source, SourceClass, DestClass);
-this.$mapper.mapArrayAsync(sources, SourceClass, DestClass);
-this.$mapper.merge(updates, existing, SourceClass, DestClass);
-```
-
 ## 🎯 实际应用场景
 
 ### 场景 1: API 数据转换
@@ -421,55 +348,6 @@ onMounted(async () => {
 </script>
 ```
 
-### 场景 5: Pinia Store 集成
-
-```typescript
-// stores/user.ts
-import { defineStore } from 'pinia';
-
-export const useUserStore = defineStore('user', () => {
-  const users = ref<UserDTO[]>([]);
-  const isLoading = ref(false);
-  
-  async function loadUsers() {
-    isLoading.value = true;
-    try {
-      const response = await fetch('/api/users');
-      const data = await response.json();
-      
-      // 使用 Pinia 插件提供的映射功能
-      users.value = await this.$mapper.mapArrayAsync(data, UserEntity, UserDTO);
-    } finally {
-      isLoading.value = false;
-    }
-  }
-  
-  return { users, isLoading, loadUsers };
-});
-```
-
-```vue
-<template>
-  <div>
-    <div v-if="userStore.isLoading">加载中...</div>
-    <div v-else>
-      <UserCard v-for="user in userStore.users" :key="user.id" :user="user" />
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/user';
-
-const userStore = useUserStore();
-
-onMounted(() => {
-  userStore.loadUsers();
-});
-</script>
-```
-
 ## 💡 最佳实践
 
 ### 1. 选择合适的响应式函数
@@ -565,7 +443,6 @@ const { map } = useMapper(User, UserDTO, {
 
 - Vue 3.0+
 - @orika-js/core ^1.2.0
-- Pinia 2.0+（可选，用于 Pinia 插件）
 - TypeScript 5.0+
 - Node.js 16+
 - 支持浏览器环境
@@ -583,6 +460,7 @@ const { map } = useMapper(User, UserDTO, {
 ## 🔗 相关链接
 
 - [@orika-js/core 核心库](../core)
+- [@orika-js/pinia Pinia 适配器](../pinia)
 - [@orika-js/react React 适配器](../react)
 - [GitHub 仓库](https://github.com/stevenleep/orika-js)
 - [问题反馈](https://github.com/stevenleep/orika-js/issues)

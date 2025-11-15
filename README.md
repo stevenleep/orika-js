@@ -33,6 +33,9 @@ npm install @orika-js/core
 # Vue 3
 npm install @orika-js/vue3
 
+# Pinia (Vue 3 状态管理)
+npm install @orika-js/pinia
+
 # React
 npm install @orika-js/react
 ```
@@ -83,18 +86,37 @@ createMapperBuilder<User, UserDTO>()
 ### Vue 3
 
 ```typescript
-import { useMapper, mapToReactive, mapToComputed, createPiniaMapperPlugin } from '@orika-js/vue3';
+import { useMapper, mapToReactive, mapToComputed } from '@orika-js/vue3';
 
 const { map, mapArray } = useMapper(UserEntity, UserDTO);
 const reactiveDTO = mapToReactive(user, User, UserDTO);
 const computedDTO = mapToComputed(userRef, User, UserDTO);
-
-// Pinia
-pinia.use(createPiniaMapperPlugin());
-const users = this.$mapper.mapArray(data, UserEntity, UserDTO);
 ```
 
 [完整文档](./packages/vue3) · [示例](./examples/vue3-app)
+
+### Pinia
+
+```typescript
+import { createPinia } from 'pinia';
+import { createPiniaMapperPlugin } from '@orika-js/pinia';
+
+// 添加映射插件到 Pinia
+const pinia = createPinia();
+pinia.use(createPiniaMapperPlugin());
+
+// 在 store 中使用
+const userStore = defineStore('user', {
+  actions: {
+    async fetchUsers() {
+      const dtos = await api.getUsers();
+      this.users = this.$mapper.mapArray(dtos, UserDTO, User);
+    }
+  }
+});
+```
+
+[完整文档](./packages/pinia) · [示例](./examples/pinia-integration)
 
 ### React
 
@@ -120,8 +142,9 @@ const Enhanced = withMapper({ sourceClass: UserEntity, destClass: UserDTO })(Com
 | 包 | 说明 |
 |---|------|
 | [@orika-js/core](./packages/core) | 核心映射引擎，零依赖 |
-| [@orika-js/vue3](./packages/vue3) | Vue 3 适配器 |
-| [@orika-js/react](./packages/react) | React 适配器 |
+| [@orika-js/vue3](./packages/vue3) | Vue 3 Composition API 适配器 |
+| [@orika-js/pinia](./packages/pinia) | Pinia 状态管理适配器 |
+| [@orika-js/react](./packages/react) | React Hooks 适配器 |
 
 ## 开发
 

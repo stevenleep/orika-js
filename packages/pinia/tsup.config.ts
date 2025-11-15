@@ -7,7 +7,7 @@ export default defineConfig({
   clean: true,
   splitting: false,
   sourcemap: true,
-  external: ['vue', '@orika-js/core'],
+  external: ['pinia', '@orika-js/core'],
   treeshake: true,
   minify: false,
   target: 'es2020',
