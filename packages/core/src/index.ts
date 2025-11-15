@@ -97,6 +97,25 @@ export type {
 } from './types/branded-types';
 export { BrandedTypeValidators } from './types/branded-types';
 
+export type {
+  ClassProperties,
+  ClassToInterface,
+  ClassToType,
+  ClassInstance,
+  OmitClassProperties,
+  PickClassProperties,
+  PartialClass,
+  RequiredClass,
+  ReadonlyClass,
+  ClassPropertiesOfType,
+  MockClass
+} from './types/class-utilities';
+export { 
+  asClass, 
+  toClassProperties, 
+  hasClassProperties 
+} from './types/class-utilities';
+
 export { TypeUtils } from './utils/TypeUtils';
 export { ConsoleLogger } from './utils/ConsoleLogger';
 export { BatchProcessor } from './utils/BatchProcessor';
