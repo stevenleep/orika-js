@@ -316,7 +316,7 @@ export function createMappingFromDecorators<S, D>(
   }
 
   const builder = createMapperBuilder<S, D>(sourceClass, metadata.targetClass);
-  
+
   // 禁用自动映射，让装饰器完全控制
   builder.autoMap(autoMapping);
 
@@ -367,7 +367,7 @@ export function createMappingFromDecorators<S, D>(
         }
 
         // 应用转换器
-        if (config.transformer) {
+      if (config.transformer) {
           value = config.transformer(value, source);
         }
 
