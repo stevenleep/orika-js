@@ -191,7 +191,7 @@ const dto = await mapAsync(post);
 ```typescript
 import { useBatchMapper } from '@orika-js/vue3';
 
-const {
+const { 
   mapBatch,         // 批量映射
   isPending,        // 是否正在处理
   progress,         // 进度 (0-100)

@@ -124,3 +124,118 @@ export interface PiniaMapperOptions {
   debug?: boolean;
 }
 
+/**
+ * 双向映射返回结果
+ */
+export interface UseBidirectionalMapperResult<A, B> {
+  /**
+   * A → B 映射
+   */
+  toB: (source: A) => B;
+  
+  /**
+   * B → A 映射
+   */
+  toA: (source: B) => A;
+  
+  /**
+   * 是否正在映射
+   */
+  isMapping: Ref<boolean>;
+  
+  /**
+   * 映射错误
+   */
+  error: Ref<Error | null>;
+}
+
+/**
+ * 差异检测返回结果
+ */
+export interface UseMapperDiffResult<T> {
+  /**
+   * 计算差异
+   */
+  diff: (obj1: T, obj2: T) => Partial<T>;
+  
+  /**
+   * 检查是否有变更
+   */
+  hasChanges: (changes: Partial<T>) => boolean;
+  
+  /**
+   * 应用变更
+   */
+  applyChanges: (changes: Partial<T>, targetClass: ClassConstructor<T>) => T;
+}
+
+/**
+ * 链式映射返回结果
+ */
+export interface UseMapperChainResult {
+  /**
+   * 链式映射
+   */
+  mapChain: <T>(source: any, ...classes: ClassConstructor<any>[]) => T;
+  
+  /**
+   * 异步链式映射
+   */
+  mapChainAsync: <T>(source: any, ...classes: ClassConstructor<any>[]) => Promise<T>;
+  
+  /**
+   * 是否正在映射
+   */
+  isMapping: Ref<boolean>;
+  
+  /**
+   * 映射错误
+   */
+  error: Ref<Error | null>;
+}
+
+/**
+ * 合并映射返回结果
+ */
+export interface UseMergeMapperResult<S, D> {
+  /**
+   * 合并映射
+   */
+  merge: (source: Partial<S>, destination: D) => D;
+  
+  /**
+   * 异步合并映射
+   */
+  mergeAsync: (source: Partial<S>, destination: D) => Promise<D>;
+  
+  /**
+   * 是否正在映射
+   */
+  isMapping: Ref<boolean>;
+  
+  /**
+   * 映射错误
+   */
+  error: Ref<Error | null>;
+}
+
+/**
+ * 性能统计返回结果
+ */
+export interface UseMapperStatsResult {
+  /**
+   * 统计信息
+   */
+  stats: Ref<any>;
+  
+  /**
+   * 刷新统计
+   */
+  refreshStats: () => void;
+  
+  /**
+   * 重置统计
+   */
+  resetStats: () => void;
+}
+

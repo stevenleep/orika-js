@@ -4,11 +4,8 @@ import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions, UseMappingResult } from '../types';
 
 /**
- * Hook: 提供基础的同步映射能力
  * @example
- * const { map, mapArray, isMapping, error } = useMapper(User, UserDTO);
- * 
- * const user = { id: 1, name: 'Alice' };
+ * const { map, mapArray } = useMapper(User, UserDTO);
  * const dto = map(user);
  */
 export function useMapper<S, D>(

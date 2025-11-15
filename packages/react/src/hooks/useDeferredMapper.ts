@@ -4,16 +4,8 @@ import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from '../types';
 
 /**
- * Hook: React 18 useDeferredValue 集成 - 延迟映射
- * 在高频更新场景下延迟映射，避免性能问题
  * @example
- * const [searchQuery, setSearchQuery] = useState('');
- * const deferredResults = useDeferredMapper(
- *   searchResults,
- *   SearchResult,
- *   SearchResultDTO
- * );
- * // deferredResults 会延迟更新，不会阻塞输入
+ * const deferredResults = useDeferredMapper(searchResults, SearchResult, SearchResultDTO);
  */
 export function useDeferredMapper<S, D>(
   source: S | S[] | null,

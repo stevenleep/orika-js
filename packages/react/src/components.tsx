@@ -3,55 +3,19 @@ import { MapperFactory } from '@orika-js/core';
 import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from './types';
 
-/**
- * Mapper 组件属性
- */
 export interface MapperProps<S, D> {
-  /**
-   * 源数据
-   */
   source: S | S[];
-  
-  /**
-   * 源类
-   */
   sourceClass: ClassConstructor<S>;
-  
-  /**
-   * 目标类
-   */
   destClass: ClassConstructor<D>;
-  
-  /**
-   * 映射选项
-   */
   options?: ReactMapperOptions;
-  
-  /**
-   * Render props
-   */
   children: (result: D | D[], isMapping: boolean, error: Error | null) => React.ReactNode;
-  
-  /**
-   * 错误回退
-   */
   fallback?: React.ReactNode;
 }
 
 /**
- * Mapper 组件 - Render Props 模式
- * 
  * @example
- * <Mapper 
- *   source={user} 
- *   sourceClass={UserEntity} 
- *   destClass={UserDTO}
- * >
- *   {(dto, isMapping, error) => (
- *     error ? <Error /> : 
- *     isMapping ? <Loading /> : 
- *     <UserProfile data={dto} />
- *   )}
+ * <Mapper source={user} sourceClass={User} destClass={UserDTO}>
+ *   {(dto, isMapping, error) => <UserProfile data={dto} />}
  * </Mapper>
  */
 export function Mapper<S, D>({
@@ -97,44 +61,15 @@ export function Mapper<S, D>({
   return <>{children(result, false, error)}</>;
 }
 
-/**
- * AsyncMapper 组件属性
- */
 export interface AsyncMapperProps<S, D> {
-  /**
-   * 源数据
-   */
   source: S | S[];
-  
-  /**
-   * 源类
-   */
   sourceClass: ClassConstructor<S>;
-  
-  /**
-   * 目标类
-   */
   destClass: ClassConstructor<D>;
-  
-  /**
-   * 映射选项
-   */
   options?: ReactMapperOptions;
-  
-  /**
-   * Render props
-   */
   children: (result: D | D[]) => React.ReactNode;
-  
-  /**
-   * 加载中组件
-   */
   fallback?: React.ReactNode;
 }
 
-/**
- * 异步映射资源 - 用于 Suspense
- */
 function createMapperResource<S, D>(
   source: S | S[],
   sourceClass: ClassConstructor<S>,
@@ -173,15 +108,9 @@ function createMapperResource<S, D>(
 }
 
 /**
- * AsyncMapper 组件 - 配合 Suspense 使用
- * 
  * @example
  * <Suspense fallback={<Loading />}>
- *   <AsyncMapper 
- *     source={user} 
- *     sourceClass={UserEntity} 
- *     destClass={UserDTO}
- *   >
+ *   <AsyncMapper source={user} sourceClass={User} destClass={UserDTO}>
  *     {(dto) => <UserProfile data={dto} />}
  *   </AsyncMapper>
  * </Suspense>
@@ -206,9 +135,6 @@ export function AsyncMapper<S, D>({
   );
 }
 
-/**
- * AsyncMapper 内容组件
- */
 function AsyncMapperContent<D>({
   resource,
   children
@@ -220,59 +146,24 @@ function AsyncMapperContent<D>({
   return <>{children(result)}</>;
 }
 
-/**
- * MapperList 组件属性
- */
 export interface MapperListProps<S, D> {
-  /**
-   * 源数据数组
-   */
   sources: S[];
-  
-  /**
-   * 源类
-   */
   sourceClass: ClassConstructor<S>;
-  
-  /**
-   * 目标类
-   */
   destClass: ClassConstructor<D>;
-  
-  /**
-   * 映射选项
-   */
   options?: ReactMapperOptions;
-  
-  /**
-   * 渲染每一项
-   */
   renderItem: (item: D, index: number) => React.ReactNode;
-  
-  /**
-   * 列表 key 提取器
-   */
   keyExtractor?: (item: D, index: number) => string | number;
-  
-  /**
-   * 空列表组件
-   */
   emptyComponent?: React.ReactNode;
 }
 
 /**
- * MapperList 组件 - 列表映射渲染
- * 
  * @example
  * <MapperList
  *   sources={users}
- *   sourceClass={UserEntity}
+ *   sourceClass={User}
  *   destClass={UserDTO}
- *   renderItem={(dto, index) => (
- *     <UserCard key={dto.id} user={dto} />
- *   )}
+ *   renderItem={(dto) => <UserCard user={dto} />}
  *   keyExtractor={(dto) => dto.id}
- *   emptyComponent={<EmptyState />}
  * />
  */
 export function MapperList<S, D>({

@@ -4,16 +4,10 @@ import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from '../types';
 
 /**
- * Hook: 双向映射 - 适用于表单编辑场景
- * Entity ↔ DTO 双向转换
  * @example
- * const { toDTO, toEntity } = useBidirectionalMapper(UserEntity, UserDTO);
- * 
- * // 加载时: Entity → DTO
- * const formData = toDTO(userEntity);
- * 
- * // 提交时: DTO → Entity
- * const updated = toEntity(formData);
+ * const { toB, toA } = useBidirectionalMapper(UserEntity, UserDTO);
+ * const dto = toB(entity);
+ * const entity = toA(dto);
  */
 export function useBidirectionalMapper<A, B>(
   classA: ClassConstructor<A>,

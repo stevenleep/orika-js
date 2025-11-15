@@ -4,13 +4,9 @@ import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from '../types';
 
 /**
- * Hook: 合并映射 - 更新现有对象而不是创建新对象
- * 适用于表单更新、部分数据更新等场景
  * @example
- * const { merge, mergeAsync } = useMergeMapper(UserDTO, UserEntity);
- * 
- * // 只更新变化的字段
- * const updated = merge(changes, existingUser);
+ * const { merge } = useMergeMapper(UserDTO, UserEntity);
+ * const updated = merge(changes, existing);
  */
 export function useMergeMapper<S, D>(
   sourceClass: ClassConstructor<S>,

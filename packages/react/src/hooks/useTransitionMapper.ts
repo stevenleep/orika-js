@@ -4,12 +4,8 @@ import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from '../types';
 
 /**
- * Hook: React 18 useTransition 集成 - 非阻塞映射
- * 大数据量映射不会阻塞用户交互
  * @example
- * const { mapWithTransition, isPending } = useTransitionMapper(UserEntity, UserDTO);
- * 
- * // 映射大数组时不会阻塞UI
+ * const { mapWithTransition, isPending } = useTransitionMapper(User, UserDTO);
  * mapWithTransition(largeArray, setMappedData);
  */
 export function useTransitionMapper<S, D>(

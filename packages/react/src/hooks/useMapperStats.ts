@@ -3,12 +3,9 @@ import { MapperFactory } from '@orika-js/core';
 import type { ClassConstructor, MappingStats } from '@orika-js/core';
 
 /**
- * Hook: 性能统计
  * @example
- * const { stats, enableStats, resetStats } = useMapperStats(UserEntity, UserDTO);
- * 
- * console.log(`Average mapping time: ${stats.averageTime}ms`);
- * console.log(`Total mappings: ${stats.totalMappings}`);
+ * const { stats, refreshStats } = useMapperStats(User, UserDTO);
+ * console.log(stats?.averageTime);
  */
 export function useMapperStats<S, D>(
   sourceClass?: ClassConstructor<S>,

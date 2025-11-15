@@ -8,21 +8,14 @@ export { useBatchMapper } from './useBatchMapper';
 export { useAutoMapper } from './useAutoMapper';
 
 // 表单处理
-export { useMergeMapper } from './useMergeMapper';
 export { useBidirectionalMapper } from './useBidirectionalMapper';
 export { useMapperDiff } from './useMapperDiff';
+export { useMergeMapper } from './useMergeMapper';
 
 // 链式转换
 export { useMapperChain } from './useMapperChain';
 
 // 性能优化
-export { useMapperCallback } from './useMapperCallback';
 export { useMapperStats } from './useMapperStats';
-
-// React 18 特性
-export { useTransitionMapper } from './useTransitionMapper';
-export { useDeferredMapper } from './useDeferredMapper';
-
-// 条件映射
 export { useConditionalMapper } from './useConditionalMapper';
 

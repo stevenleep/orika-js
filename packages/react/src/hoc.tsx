@@ -3,56 +3,23 @@ import { MapperFactory } from '@orika-js/core';
 import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from './types';
 
-/**
- * withMapper HOC 配置
- */
 export interface WithMapperConfig<S, D> {
-  /**
-   * 源类
-   */
   sourceClass: ClassConstructor<S>;
-  
-  /**
-   * 目标类
-   */
   destClass: ClassConstructor<D>;
-  
-  /**
-   * 源数据的 prop 名称
-   */
   sourceProp: string;
-  
-  /**
-   * 映射结果的 prop 名称
-   */
   destProp: string;
-  
-  /**
-   * 映射选项
-   */
   options?: ReactMapperOptions;
-  
-  /**
-   * 是否数组映射
-   */
   isArray?: boolean;
 }
 
 /**
- * withMapper - 高阶组件，自动映射 props
- * 
  * @example
- * // 自动将 userEntity 映射为 userDTO
  * const UserProfileWithMapper = withMapper({
  *   sourceClass: UserEntity,
  *   destClass: UserDTO,
  *   sourceProp: 'userEntity',
  *   destProp: 'userDTO'
  * })(UserProfile);
- * 
- * // 使用
- * <UserProfileWithMapper userEntity={entity} />
- * // UserProfile 会收到 userDTO prop
  */
 export function withMapper<S, D, P extends Record<string, any>>(
   config: WithMapperConfig<S, D>
@@ -95,39 +62,15 @@ export function withMapper<S, D, P extends Record<string, any>>(
   };
 }
 
-/**
- * withBidirectionalMapper HOC 配置
- */
 export interface WithBidirectionalMapperConfig<A, B> {
-  /**
-   * 类 A
-   */
   classA: ClassConstructor<A>;
-  
-  /**
-   * 类 B
-   */
   classB: ClassConstructor<B>;
-  
-  /**
-   * 数据的 prop 名称
-   */
   dataProp: string;
-  
-  /**
-   * 提供给组件的映射函数名称
-   */
   mapperProp?: string;
-  
-  /**
-   * 映射选项
-   */
   options?: ReactMapperOptions;
 }
 
 /**
- * withBidirectionalMapper - 提供双向映射函数的 HOC
- * 
  * @example
  * const UserFormWithMapper = withBidirectionalMapper({
  *   classA: UserEntity,
@@ -135,8 +78,6 @@ export interface WithBidirectionalMapperConfig<A, B> {
  *   dataProp: 'user',
  *   mapperProp: 'mapper'
  * })(UserForm);
- * 
- * // UserForm 会收到 mapper.toDTO 和 mapper.toEntity
  */
 export function withBidirectionalMapper<A, B, P extends Record<string, any>>(
   config: WithBidirectionalMapperConfig<A, B>
@@ -169,11 +110,9 @@ export function withBidirectionalMapper<A, B, P extends Record<string, any>>(
 }
 
 /**
- * withAutoMapper - 自动映射多个 props
- * 
  * @example
  * const MyComponent = withAutoMapper([
- *   { sourceClass: UserEntity, destClass: UserDTO, sourceProp: 'user', destProp: 'userDTO' },
+ *   { sourceClass: User, destClass: UserDTO, sourceProp: 'user', destProp: 'userDTO' },
  *   { sourceClass: PostEntity, destClass: PostDTO, sourceProp: 'post', destProp: 'postDTO' }
  * ])(Component);
  */

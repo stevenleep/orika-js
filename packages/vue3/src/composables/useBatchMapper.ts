@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { ref } from 'vue';
 import { MapperFactory } from '@orika-js/core';
 import type { ClassConstructor } from '@orika-js/core';
-import type { ReactMapperOptions, UseBatchMappingResult } from '../types';
+import type { VueMapperOptions } from '../types';
 
 /**
  * @example
@@ -11,20 +11,20 @@ import type { ReactMapperOptions, UseBatchMappingResult } from '../types';
 export function useBatchMapper<S, D>(
   sourceClass: ClassConstructor<S>,
   destClass: ClassConstructor<D>,
-  options?: ReactMapperOptions
-): UseBatchMappingResult<S, D> {
+  options?: VueMapperOptions
+) {
   const factory = MapperFactory.getInstance();
-  const [isPending, setIsPending] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [error, setError] = useState<Error | null>(null);
+  const isPending = ref(false);
+  const progress = ref(0);
+  const error = ref<Error | null>(null);
 
-  const mapBatch = useCallback(async (
+  const mapBatch = async (
     sources: S[],
     batchOptions?: { batchSize?: number; onProgress?: (progress: number) => void }
-  ): Promise<D[]> => {
-    setIsPending(true);
-    setProgress(0);
-    setError(null);
+  ) => {
+    isPending.value = true;
+    progress.value = 0;
+    error.value = null;
 
     try {
       const batchSize = batchOptions?.batchSize || 10;
@@ -39,23 +39,21 @@ export function useBatchMapper<S, D>(
         );
         results.push(...batchResults);
         
-        const currentProgress = Math.min(100, Math.round(((i + batch.length) / sources.length) * 100));
-        setProgress(currentProgress);
+        progress.value = Math.min(100, Math.round(((i + batch.length) / sources.length) * 100));
         
         if (batchOptions?.onProgress) {
-          batchOptions.onProgress(currentProgress);
+          batchOptions.onProgress(progress.value);
         }
       }
       
       return results;
     } catch (err) {
-      const error = err as Error;
-      setError(error);
-      throw error;
+      error.value = err as Error;
+      throw err;
     } finally {
-      setIsPending(false);
+      isPending.value = false;
     }
-  }, [sourceClass, destClass, factory]);
+  };
 
   return {
     mapBatch,

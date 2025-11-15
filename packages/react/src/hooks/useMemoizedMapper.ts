@@ -4,7 +4,6 @@ import type { ClassConstructor } from '@orika-js/core';
 import type { ReactMapperOptions } from '../types';
 
 /**
- * Hook: 记忆化映射 - 使用 useMemo 缓存映射结果
  * @example
  * const dto = useMemoizedMapper(user, User, UserDTO);
  */

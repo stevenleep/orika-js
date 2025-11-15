@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { ref } from 'vue';
 import { MapperFactory } from '@orika-js/core';
 import type { ClassConstructor } from '@orika-js/core';
-import type { ReactMapperOptions, UseAsyncMappingResult } from '../types';
 import { useMapper } from './useMapper';
+import type { UseAsyncMappingResult, VueMapperOptions } from '../types';
 
 /**
  * @example
@@ -12,45 +12,44 @@ import { useMapper } from './useMapper';
 export function useAsyncMapper<S, D>(
   sourceClass: ClassConstructor<S>,
   destClass: ClassConstructor<D>,
-  options?: ReactMapperOptions
+  options?: VueMapperOptions
 ): UseAsyncMappingResult<S, D> {
   const factory = MapperFactory.getInstance();
   const baseMapper = useMapper(sourceClass, destClass, options);
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoading = ref(false);
 
-  const mapAsync = useCallback(async (source: S): Promise<D> => {
-    setIsLoading(true);
+  const mapAsync = async (source: S) => {
+    isLoading.value = true;
+    baseMapper.error.value = null;
     
     try {
       const result = await factory.mapAsync(source, sourceClass, destClass, options);
-      return result;
+      return result as any;
     } catch (err) {
-      const error = err as Error;
-      throw error;
+      baseMapper.error.value = err as Error;
+      throw err;
     } finally {
-      setIsLoading(false);
+      isLoading.value = false;
     }
-  }, [sourceClass, destClass, factory, options]);
+  };
 
-  const mapArrayAsync = useCallback(async (sources: S[]): Promise<D[]> => {
-    setIsLoading(true);
+  const mapArrayAsync = async (sources: S[]) => {
+    isLoading.value = true;
+    baseMapper.error.value = null;
     
     try {
       const results = await factory.mapArrayAsync(sources, sourceClass, destClass);
-      return results;
+      return results as any;
     } catch (err) {
-      const error = err as Error;
-      throw error;
+      baseMapper.error.value = err as Error;
+      throw err;
     } finally {
-      setIsLoading(false);
+      isLoading.value = false;
     }
-  }, [sourceClass, destClass, factory]);
+  };
 
   return {
-    map: baseMapper.map,
-    mapArray: baseMapper.mapArray,
-    isMapping: baseMapper.isMapping,
-    error: baseMapper.error,
+    ...baseMapper,
     mapAsync,
     mapArrayAsync,
     isLoading

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { ref } from 'vue';
 import { MapperFactory } from '@orika-js/core';
 import type { ClassConstructor } from '@orika-js/core';
 
@@ -9,44 +9,42 @@ import type { ClassConstructor } from '@orika-js/core';
  */
 export function useMapperChain() {
   const factory = MapperFactory.getInstance();
-  const [isMapping, setIsMapping] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const isMapping = ref(false);
+  const error = ref<Error | null>(null);
 
-  const mapChain = useCallback(<T>(
+  const mapChain = <T>(
     source: any,
     ...classes: ClassConstructor<any>[]
   ): T => {
-    setIsMapping(true);
-    setError(null);
+    isMapping.value = true;
+    error.value = null;
     
     try {
       return factory.mapChain<T>(source, ...classes);
     } catch (err) {
-      const error = err as Error;
-      setError(error);
-      throw error;
+      error.value = err as Error;
+      throw err;
     } finally {
-      setIsMapping(false);
+      isMapping.value = false;
     }
-  }, [factory]);
+  };
 
-  const mapChainAsync = useCallback(async <T>(
+  const mapChainAsync = async <T>(
     source: any,
     ...classes: ClassConstructor<any>[]
   ): Promise<T> => {
-    setIsMapping(true);
-    setError(null);
+    isMapping.value = true;
+    error.value = null;
     
     try {
       return await factory.mapChainAsync<T>(source, ...classes);
     } catch (err) {
-      const error = err as Error;
-      setError(error);
-      throw error;
+      error.value = err as Error;
+      throw err;
     } finally {
-      setIsMapping(false);
+      isMapping.value = false;
     }
-  }, [factory]);
+  };
 
   return {
     mapChain,
