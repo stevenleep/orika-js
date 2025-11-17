@@ -1,0 +1,159 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the form below as completely as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Install '@orika-js/core'
+        2. Create a mapper with '...'
+        3. Call 'factory.map(...)'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+      placeholder: I expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened
+      placeholder: Instead, I got...
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: Please provide a minimal code sample that reproduces the issue
+      render: typescript
+      placeholder: |
+        import { createMapperBuilder, MapperFactory } from '@orika-js/core';
+
+        // Your code here
+    validations:
+      required: false
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Message / Stack Trace
+      description: If applicable, paste the error message or stack trace
+      render: shell
+      placeholder: Paste error here...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which package is affected?
+      options:
+        - "@orika-js/core"
+        - "@orika-js/react"
+        - "@orika-js/vue3"
+        - "@orika-js/zustand"
+        - "@orika-js/jotai"
+        - "@orika-js/pinia"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of the package are you using?
+      placeholder: "1.2.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: What environment are you running in?
+      options:
+        - "Browser"
+        - "Node.js"
+        - "Both"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version (if applicable)
+      description: Run `node --version` to get your Node.js version
+      placeholder: "v18.17.0"
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      placeholder: "macOS 13.5, Windows 11, Ubuntu 22.04"
+
+  - type: dropdown
+    id: typescript
+    attributes:
+      label: TypeScript Version
+      description: What version of TypeScript are you using?
+      options:
+        - "5.3.x"
+        - "5.2.x"
+        - "5.1.x"
+        - "5.0.x"
+        - "4.9.x"
+        - "Other"
+        - "Not using TypeScript"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched for existing issues before creating this one
+          required: true
+        - label: I have provided all required information
+          required: true
+        - label: This is not a question (for questions, use GitHub Discussions)
+          required: true
+

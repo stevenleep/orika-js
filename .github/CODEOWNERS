@@ -1,0 +1,46 @@
+# CODEOWNERS file
+# 
+# This file defines individuals or teams that are responsible for code in this repository.
+# Code owners are automatically requested for review when someone opens a pull request
+# that modifies code that they own.
+
+# Default owners for everything in the repo
+* @stevenleep
+
+# Core package
+/packages/core/ @stevenleep
+
+# React package
+/packages/react/ @stevenleep
+
+# Vue 3 package
+/packages/vue3/ @stevenleep
+
+# Pinia package
+/packages/pinia/ @stevenleep
+
+# Zustand package
+/packages/zustand/ @stevenleep
+
+# Jotai package
+/packages/jotai/ @stevenleep
+
+# Documentation
+*.md @stevenleep
+/docs/ @stevenleep
+
+# GitHub configuration
+/.github/ @stevenleep
+
+# CI/CD
+/.github/workflows/ @stevenleep
+
+# Examples
+/examples/ @stevenleep
+
+# Configuration files
+*.json @stevenleep
+*.yml @stevenleep
+*.yaml @stevenleep
+tsconfig*.json @stevenleep
+

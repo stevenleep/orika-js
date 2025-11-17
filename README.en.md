@@ -2,43 +2,43 @@
 
 <div align="center">
 
-**类型安全的 TypeScript 对象映射库**
+**Type-Safe Object Mapping Library for TypeScript**
 
 [![npm version](https://img.shields.io/npm/v/@orika-js/core.svg)](https://www.npmjs.com/package/@orika-js/core)
 [![npm downloads](https://img.shields.io/npm/dm/@orika-js/core.svg)](https://www.npmjs.com/package/@orika-js/core)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-[English](./README.en.md) | 简体中文
+[English](./README.en.md) | [简体中文](./README.md)
 
 </div>
 
-## 简介
+## Introduction
 
-Orika-JS 是一个专为 TypeScript 设计的对象映射库，用于在分层架构中优雅地处理 Entity、DTO、VO 之间的转换。
+Orika-JS is an object mapping library designed for TypeScript, enabling elegant transformations between Entity, DTO, and VO in layered architectures.
 
-### 核心特性
+### Key Features
 
-- **类型安全** - 完整的 TypeScript 类型推导和编译时检查
-- **约定优于配置** - 同名字段自动映射，零配置即可使用
-- **高性能** - 智能缓存、批量处理、惰性求值
-- **异步支持** - 原生 Promise，支持异步字段转换
-- **框架集成** - 深度集成 React、Vue 3、Zustand、Jotai、Pinia
-- **轻量级** - 零运行时依赖，核心库仅 8KB gzipped
+- **Type Safety** - Complete TypeScript type inference and compile-time checking
+- **Convention Over Configuration** - Automatic mapping for same-name fields, zero configuration required
+- **High Performance** - Smart caching, batch processing, and lazy evaluation
+- **Async Support** - Native Promise support for async field transformations
+- **Framework Integration** - Deep integration with React, Vue 3, Zustand, Jotai, and Pinia
+- **Lightweight** - Zero runtime dependencies, core library only 8KB gzipped
 
-### 适用场景
+### Use Cases
 
-- **API 层**：后端 DTO 与前端 Model 转换
-- **业务层**：Entity 与 DTO 之间的双向映射
-- **视图层**：Model 转换为 ViewModel
-- **数据持久化**：领域对象与数据库实体转换
+- **API Layer**: Transform backend DTOs to frontend Models
+- **Business Layer**: Bidirectional mapping between Entities and DTOs
+- **View Layer**: Convert Models to ViewModels
+- **Data Persistence**: Transform domain objects to database entities
 
-## 安装
+## Installation
 
 ```bash
 pnpm add @orika-js/core
 ```
 
-框架集成包（可选）：
+Framework integration packages (optional):
 
 ```bash
 pnpm add @orika-js/react      # React
@@ -48,14 +48,14 @@ pnpm add @orika-js/zustand    # Zustand
 pnpm add @orika-js/jotai      # Jotai
 ```
 
-## 快速开始
+## Quick Start
 
-### 基础映射
+### Basic Mapping
 
 ```typescript
 import { createMapperBuilder, MapperFactory } from '@orika-js/core';
 
-// 定义数据模型
+// Define data models
 class User {
   id: number;
   username: string;
@@ -69,27 +69,27 @@ class UserDTO {
   email: string;
 }
 
-// 配置映射规则
+// Configure mapping rules
 createMapperBuilder<User, UserDTO>()
   .from(User)
   .to(UserDTO)
-  .mapField('username', 'displayName')  // 字段重命名
-  .exclude('password')                  // 排除敏感字段
+  .mapField('username', 'displayName')  // Rename field
+  .exclude('password')                  // Exclude sensitive field
   .register();
 
-// 执行映射
+// Execute mapping
 const factory = MapperFactory.getInstance();
 
-// 单个对象
+// Single object
 const dto = factory.map(user, User, UserDTO);
 
-// 批量映射
+// Batch mapping
 const dtos = factory.mapArray(users, User, UserDTO);
 ```
 
-### 异步字段转换
+### Async Field Transformation
 
-适用于需要从其他数据源获取关联数据的场景。
+Use when you need to fetch related data from other sources.
 
 ```typescript
 createMapperBuilder<Post, PostDetailDTO>()
@@ -104,33 +104,33 @@ createMapperBuilder<Post, PostDetailDTO>()
   })
   .register();
 
-// 自动处理所有异步操作
+// Automatically handles all async operations
 const detail = await factory.mapAsync(post, Post, PostDetailDTO);
 ```
 
-### 自定义转换逻辑
+### Custom Transformation Logic
 
-支持计算字段、条件映射等复杂场景。
+Support for computed fields, conditional mapping, and complex scenarios.
 
 ```typescript
 createMapperBuilder<Product, ProductDTO>()
   .from(Product)
   .to(ProductDTO)
-  // 计算字段
+  // Computed field
   .forMember('totalPrice', (src) => src.price * src.quantity)
-  // 条件映射
+  // Conditional mapping
   .mapFieldWhen('discountPrice', 'finalPrice',
     (src) => src.onSale,
     (src) => src.price * (1 - src.discount)
   )
-  // 类型转换
+  // Type conversion
   .forMember('createdAt', (src) => new Date(src.createTime))
   .register();
 ```
 
-### 嵌套对象映射
+### Nested Object Mapping
 
-处理复杂的对象结构。
+Handle complex object structures.
 
 ```typescript
 createMapperBuilder<Order, OrderDTO>()
@@ -145,28 +145,28 @@ createMapperBuilder<Order, OrderDTO>()
   .register();
 ```
 
-## 使用场景
+## Real-World Scenarios
 
-### 场景 1：API 响应转换
+### Scenario 1: API Response Transformation
 
-将后端 API 返回的数据转换为前端使用的模型。
+Transform backend API responses to frontend models.
 
 ```typescript
-// 后端返回的数据结构
+// Backend response structure
 interface APIResponse {
   user_id: number;
   user_name: string;
   created_at: string;
 }
 
-// 前端数据模型
+// Frontend data model
 class UserModel {
   id: number;
   name: string;
   createdAt: Date;
 }
 
-// 配置映射
+// Configure mapping
 createMapperBuilder<APIResponse, UserModel>()
   .from(Object as any)
   .to(UserModel)
@@ -175,14 +175,14 @@ createMapperBuilder<APIResponse, UserModel>()
   .forMember('createdAt', (src) => new Date(src.created_at))
   .register();
 
-// 使用
+// Usage
 const response = await api.getUser();
 const user = factory.map(response, Object as any, UserModel);
 ```
 
-### 场景 2：表单数据提交
+### Scenario 2: Form Data Submission
 
-将表单数据转换为 API 请求格式。
+Convert form data to API request format.
 
 ```typescript
 createMapperBuilder<FormData, CreateUserRequest>()
@@ -198,9 +198,9 @@ createMapperBuilder<FormData, CreateUserRequest>()
   .register();
 ```
 
-### 场景 3：列表数据展示
+### Scenario 3: List View Data
 
-为列表视图准备优化的数据结构。
+Prepare optimized data structures for list views.
 
 ```typescript
 createMapperBuilder<Product, ProductListItemDTO>()
@@ -217,7 +217,7 @@ createMapperBuilder<Product, ProductListItemDTO>()
   .register();
 ```
 
-## 框架集成
+## Framework Integration
 
 ### React
 
@@ -225,14 +225,14 @@ createMapperBuilder<Product, ProductListItemDTO>()
 import { useMapper, useMemoizedMapper } from '@orika-js/react';
 
 function UserProfile({ user }) {
-  // 自动响应依赖变化
+  // Automatically responds to dependency changes
   const dto = useMemoizedMapper(user, User, UserDTO);
   
   return <div>{dto.displayName}</div>;
 }
 ```
 
-完整文档：[React 集成指南](./packages/react)
+Full documentation: [React Integration Guide](./packages/react)
 
 ### Vue 3
 
@@ -243,7 +243,7 @@ export default {
   setup() {
     const { map } = useMapper(User, UserDTO);
     
-    // 响应式映射
+    // Reactive mapping
     const userDTO = mapToReactive(user, User, UserDTO);
     
     return { userDTO };
@@ -251,9 +251,9 @@ export default {
 }
 ```
 
-完整文档：[Vue 3 集成指南](./packages/vue3)
+Full documentation: [Vue 3 Integration Guide](./packages/vue3)
 
-### 状态管理
+### State Management
 
 ```typescript
 // Pinia
@@ -269,50 +269,50 @@ import { atomWithMapper } from '@orika-js/jotai';
 const userDTOAtom = atomWithMapper(userAtom, User, UserDTO);
 ```
 
-集成文档：[Pinia](./packages/pinia) • [Zustand](./packages/zustand) • [Jotai](./packages/jotai)
+Integration docs: [Pinia](./packages/pinia) • [Zustand](./packages/zustand) • [Jotai](./packages/jotai)
 
-## 生态系统
+## Ecosystem
 
-| 包 | 版本 | 大小 | 描述 |
-|---|------|------|------|
-| [@orika-js/core](./packages/core) | [![npm](https://img.shields.io/npm/v/@orika-js/core.svg)](https://www.npmjs.com/package/@orika-js/core) | 8KB | 核心映射引擎 |
-| [@orika-js/react](./packages/react) | [![npm](https://img.shields.io/npm/v/@orika-js/react.svg)](https://www.npmjs.com/package/@orika-js/react) | 3KB | React 集成 |
-| [@orika-js/vue3](./packages/vue3) | [![npm](https://img.shields.io/npm/v/@orika-js/vue3.svg)](https://www.npmjs.com/package/@orika-js/vue3) | 3KB | Vue 3 集成 |
-| [@orika-js/pinia](./packages/pinia) | [![npm](https://img.shields.io/npm/v/@orika-js/pinia.svg)](https://www.npmjs.com/package/@orika-js/pinia) | 2KB | Pinia 插件 |
-| [@orika-js/zustand](./packages/zustand) | [![npm](https://img.shields.io/npm/v/@orika-js/zustand.svg)](https://www.npmjs.com/package/@orika-js/zustand) | 2KB | Zustand 中间件 |
-| [@orika-js/jotai](./packages/jotai) | [![npm](https://img.shields.io/npm/v/@orika-js/jotai.svg)](https://www.npmjs.com/package/@orika-js/jotai) | 2KB | Jotai 集成 |
+| Package | Version | Size | Description |
+|---------|---------|------|-------------|
+| [@orika-js/core](./packages/core) | [![npm](https://img.shields.io/npm/v/@orika-js/core.svg)](https://www.npmjs.com/package/@orika-js/core) | 8KB | Core mapping engine |
+| [@orika-js/react](./packages/react) | [![npm](https://img.shields.io/npm/v/@orika-js/react.svg)](https://www.npmjs.com/package/@orika-js/react) | 3KB | React integration |
+| [@orika-js/vue3](./packages/vue3) | [![npm](https://img.shields.io/npm/v/@orika-js/vue3.svg)](https://www.npmjs.com/package/@orika-js/vue3) | 3KB | Vue 3 integration |
+| [@orika-js/pinia](./packages/pinia) | [![npm](https://img.shields.io/npm/v/@orika-js/pinia.svg)](https://www.npmjs.com/package/@orika-js/pinia) | 2KB | Pinia plugin |
+| [@orika-js/zustand](./packages/zustand) | [![npm](https://img.shields.io/npm/v/@orika-js/zustand.svg)](https://www.npmjs.com/package/@orika-js/zustand) | 2KB | Zustand middleware |
+| [@orika-js/jotai](./packages/jotai) | [![npm](https://img.shields.io/npm/v/@orika-js/jotai.svg)](https://www.npmjs.com/package/@orika-js/jotai) | 2KB | Jotai integration |
 
-## 文档与资源
+## Documentation & Resources
 
-- **[核心文档](./packages/core)** - 完整的 API 参考和使用指南
-- **[示例代码](./examples)** - 从基础到高级的实际示例
-- **[最佳实践](./packages/core#best-practices)** - 生产环境使用建议
-- **[贡献指南](./CONTRIBUTING.md)** - 参与项目开发
+- **[Core Documentation](./packages/core)** - Complete API reference and usage guide
+- **[Examples](./examples)** - Practical examples from basic to advanced
+- **[Best Practices](./packages/core#best-practices)** - Production environment recommendations
+- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute to the project
 
-## 开发
+## Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 pnpm install
 
-# 构建所有包
+# Build all packages
 pnpm build
 
-# 开发模式
+# Development mode
 pnpm dev
 
-# 运行示例
+# Run examples
 pnpm --filter react-demo dev
 ```
 
-## 贡献
+## Contributing
 
-欢迎贡献代码、报告问题或提出建议！请查看[贡献指南](./CONTRIBUTING.md)了解详情。
+Contributions are welcome! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
 
-## 许可证
+## License
 
 [MIT](./LICENSE) © [Steven Lee](https://github.com/stevenleep)
 
 ---
 
-灵感来自 [Orika](https://orika-mapper.github.io/orika-docs/) (Java) 和 [AutoMapper](https://automapper.org/) (.NET)
+Inspired by [Orika](https://orika-mapper.github.io/orika-docs/) (Java) and [AutoMapper](https://automapper.org/) (.NET)
